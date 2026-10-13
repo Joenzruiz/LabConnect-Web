@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../config/database.php';
+require_once '../config/email.php';
 if (!in_array($_SESSION['user_role'] ?? '', ['admin','staff'])) { header('Location: ../index.php'); exit; }
 
 // Live counts from DB
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->prepare("UPDATE appointments SET status=?, approved_by=? WHERE appointment_id=?")
             ->execute([$map[$action], $_SESSION['user_id'], $appt_id]);
         // Notify patient on approve
-        if ($action === 'approve' || $action === 'reject') {
+        if ($action === 'approve' || $action === 'reject' || $action === 'complete') {
             $appt = $pdo->prepare("SELECT a.patient_id, STRING_AGG(t.test_name,', ') as test_name, d.first_name||' '||d.last_name as doc, a.appointment_date, a.appointment_time FROM appointments a LEFT JOIN doctors d ON a.doctor_id=d.doctor_id LEFT JOIN appointment_details ad ON ad.appointment_id=a.appointment_id LEFT JOIN laboratory_tests t ON t.test_id=ad.test_id WHERE a.appointment_id=? GROUP BY a.patient_id, d.first_name, d.last_name, a.appointment_date, a.appointment_time");
             $appt->execute([$appt_id]);
             $appt = $appt->fetch(PDO::FETCH_ASSOC);
@@ -42,12 +43,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($action === 'approve') {
                     $title = 'Appointment Confirmed';
                     $msg = "Your {$appt['test_name']} appointment".($appt['doc']?" with Dr. {$appt['doc']}":'')." on {$appt['appointment_date']} has been approved. Please arrive 15 minutes early.";
+                } elseif ($action === 'complete') {
+                    $title = 'Appointment Completed';
+                    $msg = "Your {$appt['test_name']} appointment on {$appt['appointment_date']} has been completed. Your lab results will be available shortly.";
                 } else {
                     $title = 'Appointment Cancelled';
                     $msg = "Your {$appt['test_name']} appointment on {$appt['appointment_date']} has been cancelled. Please contact us for more information or book a new schedule.";
                 }
                 $pdo->prepare("INSERT INTO notifications (patient_id,title,message,notification_type,is_read) VALUES (?,?,?,?,false)")
                     ->execute([$appt['patient_id'], $title, $msg, 'appointment']);
+                brevo_notify_patient($pdo, (int)$appt['patient_id'], $title, $msg);
             }
         }
     }

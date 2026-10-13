@@ -20,9 +20,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $q = $_GET['q'] ?? '';
-$sql = "SELECT * FROM patients WHERE (first_name||' '||last_name ILIKE ? OR email ILIKE ?) ORDER BY created_at DESC";
+$per_page = 10;
+$page = max(1, (int)($_GET['page'] ?? 1));
+$offset = ($page - 1) * $per_page;
+
+$count_sql = "SELECT COUNT(*) FROM patients WHERE (first_name||' '||last_name ILIKE ? OR email ILIKE ?)";
+$count_stmt = $pdo->prepare($count_sql);
+$count_stmt->execute(["%$q%","%$q%"]);
+$total = (int)$count_stmt->fetchColumn();
+$total_pages = max(1, (int)ceil($total / $per_page));
+
+$sql = "SELECT * FROM patients WHERE (first_name||' '||last_name ILIKE ? OR email ILIKE ?) ORDER BY created_at DESC LIMIT ? OFFSET ?";
 $patients = $pdo->prepare($sql);
-$patients->execute(["%$q%","%$q%"]);
+$patients->execute(["%$q%","%$q%",$per_page,$offset]);
 $patients = $patients->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -38,10 +48,12 @@ $patients = $patients->fetchAll(PDO::FETCH_ASSOC);
     <header class="topbar">
         <div class="page-title"><h1>Patients</h1><p>Registered patients in the system.</p></div>
         <div class="user-area">
+            <button class="btn btn-primary" onclick="document.getElementById('dlg-add').showModal()">+ Add Patient</button>
             <span><?= htmlspecialchars($_SESSION['full_name'] ?? 'Admin') ?></span>
         </div>
     </header>
 
+    <div class="page-body">
     <div class="panel">
         <div class="toolbar">
             <form method="GET" class="toolbar-left">
@@ -49,8 +61,27 @@ $patients = $patients->fetchAll(PDO::FETCH_ASSOC);
                 <button class="btn btn-primary" type="submit">Search</button>
                 <?php if ($q): ?><a class="btn" href="index.php">Clear</a><?php endif; ?>
             </form>
-            <button class="btn btn-primary" onclick="document.getElementById('dlg-add').showModal()">+ Add Patient</button>
+            <span style="font-size:12px;color:var(--muted)"><?= $total ?> patient<?= $total!=1?'s':'' ?> total</span>
         </div>
+
+        <?php
+        $base = '?'.http_build_query(array_filter(['q'=>$q]));
+        if ($total_pages > 1): ?>
+        <div class="pagination">
+            <?php if ($page > 1): ?>
+            <a class="btn btn-sm" href="<?= $base ?>&page=<?= $page-1 ?>">‹ Prev</a>
+            <?php endif; ?>
+            <?php for ($p = max(1,$page-2); $p <= min($total_pages,$page+2); $p++): ?>
+            <a class="btn btn-sm <?= $p===$page?'btn-primary':'' ?>" href="<?= $base ?>&page=<?= $p ?>"><?= $p ?></a>
+            <?php endfor; ?>
+            <?php if ($page < $total_pages): ?>
+            <a class="btn btn-sm" href="<?= $base ?>&page=<?= $page+1 ?>">Next ›</a>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+        <p class="pagination-info">
+            Page <?= $page ?> of <?= $total_pages ?> &nbsp;·&nbsp; Showing <?= count($patients) ?> of <?= $total ?> patients
+        </p>
 
         <div class="table-card table-scroll">
         <table>
@@ -81,6 +112,7 @@ $patients = $patients->fetchAll(PDO::FETCH_ASSOC);
             </tbody>
         </table>
         </div>
+    </div>
     </div>
 </main>
 

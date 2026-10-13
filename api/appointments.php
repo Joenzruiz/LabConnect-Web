@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/email.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -116,6 +117,40 @@ if ($method === 'GET') {
 
         $pdo->commit();
 
+        // Send booking confirmation email via Brevo (non-blocking — ignore failure)
+        try {
+            $patientInfo = $pdo->prepare("SELECT u.email, p.first_name||' '||p.last_name as full_name
+                FROM patients p JOIN users u ON p.user_id=u.user_id WHERE p.patient_id=?");
+            $patientInfo->execute([$patientId]);
+            $pInfo = $patientInfo->fetch(PDO::FETCH_ASSOC);
+
+            // Fetch doctor details if assigned
+            $docName = '';
+            $docSpec = '';
+            if ($doctorId) {
+                $docStmt = $pdo->prepare("SELECT first_name, last_name, specialization FROM doctors WHERE doctor_id=?");
+                $docStmt->execute([$doctorId]);
+                $docRow = $docStmt->fetch(PDO::FETCH_ASSOC);
+                if ($docRow) {
+                    $docName = 'Dr. ' . $docRow['first_name'] . ' ' . $docRow['last_name'];
+                    $docSpec = $docRow['specialization'] ?? '';
+                }
+            }
+
+            if ($pInfo && !empty($pInfo['email'])) {
+                brevo_send_appointment(
+                    $pInfo['email'],
+                    $pInfo['full_name'] ?? 'Patient',
+                    $testName,
+                    $date,
+                    $time,
+                    'Pending',
+                    $docName,
+                    $docSpec
+                );
+            }
+        } catch (Exception $ignored) {}
+
         echo json_encode([
             "id"         => (int)$appointmentId,
             "patient_id" => (int)$patientId,
@@ -167,6 +202,7 @@ if ($method === 'GET') {
         // Notify patient
         $pdo->prepare("INSERT INTO notifications (patient_id,title,message,notification_type,is_read) VALUES (?,?,?,?,false)")
             ->execute([$patientId, 'Appointment Cancelled', 'You have cancelled your appointment. Book a new one anytime.', 'appointment']);
+        brevo_notify_patient($pdo, (int)$patientId, 'Appointment Cancelled', 'You have cancelled your appointment. Book a new one anytime.');
 
         echo json_encode(["success" => true, "message" => "Appointment cancelled"]);
     } catch (PDOException $e) {

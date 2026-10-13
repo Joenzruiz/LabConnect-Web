@@ -6,9 +6,35 @@ if (($_SESSION['user_role'] ?? '') !== 'admin') { header('Location: ../../index.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $act = $_POST['_action'] ?? '';
     if ($act === 'add') {
-        $hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+        $email = strtolower(trim($_POST['email']));
+        $hash  = password_hash($_POST['password'], PASSWORD_BCRYPT);
+        $role  = $_POST['role'];
         $pdo->prepare("INSERT INTO users (email,password_hash,role,status) VALUES (?,?,?,'Active')")
-            ->execute([$_POST['email'],$hash,$_POST['role']]);
+            ->execute([$email, $hash, $role]);
+
+        // If Doctor → auto-create or link a doctors profile row
+        if ($role === 'Doctor') {
+            $newUserId = $pdo->lastInsertId();
+            if (!$newUserId) {
+                $newUserId = $pdo->query("SELECT user_id FROM users WHERE email = '$email' LIMIT 1")->fetchColumn();
+            }
+            
+            // Check if doctor profile already exists with this email
+            $existingDoc = $pdo->prepare("SELECT doctor_id FROM doctors WHERE email = ?");
+            $existingDoc->execute([$email]);
+            $docId = $existingDoc->fetchColumn();
+            
+            if ($docId) {
+                // Link existing doctor profile to the new user account
+                $pdo->prepare("UPDATE doctors SET user_id = ? WHERE doctor_id = ?")
+                    ->execute([$newUserId, $docId]);
+            } else {
+                // Extract a name from email (before @) as placeholder
+                $namePart = explode('@', $email)[0];
+                $pdo->prepare("INSERT INTO doctors (user_id, first_name, last_name, email, specialization) VALUES (?, ?, '', ?, 'General Practitioner')")
+                    ->execute([$newUserId, ucfirst($namePart), $email]);
+            }
+        }
     } elseif ($act === 'toggle') {
         $curr = $pdo->prepare("SELECT status FROM users WHERE user_id=?");
         $curr->execute([$_POST['user_id']]);

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../../config/database.php';
+require_once '../../config/email.php';
 if (!in_array($_SESSION['user_role'] ?? '', ['admin','staff'])) { header('Location: ../../index.php'); exit; }
 
 $upload_dir = __DIR__.'/../../uploads/results/';
@@ -37,15 +38,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $appt->execute([$appt_id]);
     $appt = $appt->fetch(PDO::FETCH_ASSOC);
     if ($appt) {
+        $title = 'Laboratory result available';
+        $msg = 'Your '.$appt['test_name'].' result is now ready. Enter your result PIN to view and download it.';
         $pdo->prepare("INSERT INTO notifications (patient_id,title,message,notification_type,is_read) VALUES (?,?,?,?,false)")
-            ->execute([$appt['patient_id'],'Laboratory result available','Your '.$appt['test_name'].' result is now ready. Enter your result PIN to view and download it.','result']);
+            ->execute([$appt['patient_id'],$title,$msg,'result']);
+        brevo_notify_patient($pdo, (int)$appt['patient_id'], $title, $msg);
     }
 
     header('Location: index.php'); exit;
 }
 
-// List completed appointments with optional result
-$results = $pdo->query("SELECT a.appointment_id, a.appointment_date, a.status as appt_status,
+// Pagination
+$q_res = $_GET['q'] ?? '';
+$per_page = 10;
+$page = max(1, (int)($_GET['page'] ?? 1));
+$offset = ($page - 1) * $per_page;
+
+$where_res = "WHERE a.status IN ('Confirmed','Completed')";
+$params_res = [];
+if ($q_res) {
+    $where_res .= " AND (p.first_name||' '||p.last_name ILIKE ? OR t.test_name ILIKE ?)";
+    $params_res[] = "%$q_res%"; $params_res[] = "%$q_res%";
+}
+
+$count_stmt = $pdo->prepare("SELECT COUNT(DISTINCT a.appointment_id)
+    FROM appointments a
+    JOIN patients p ON a.patient_id = p.patient_id
+    LEFT JOIN appointment_details ad ON ad.appointment_id = a.appointment_id
+    LEFT JOIN laboratory_tests t ON ad.test_id = t.test_id
+    $where_res");
+$count_stmt->execute($params_res);
+$total = (int)$count_stmt->fetchColumn();
+$total_pages = max(1, (int)ceil($total / $per_page));
+
+$params_page = array_merge($params_res, [$per_page, $offset]);
+$res_stmt = $pdo->prepare("SELECT a.appointment_id, a.appointment_date, a.status as appt_status,
     p.first_name||' '||p.last_name as patient_name,
     STRING_AGG(t.test_name, ', ') as test_name,
     r.lab_result_id, r.file_path, r.file_type, r.remarks, r.released_at
@@ -54,8 +81,12 @@ $results = $pdo->query("SELECT a.appointment_id, a.appointment_date, a.status as
     LEFT JOIN appointment_details ad ON ad.appointment_id = a.appointment_id
     LEFT JOIN laboratory_tests t ON ad.test_id = t.test_id
     LEFT JOIN lab_results r ON r.appointment_id = a.appointment_id
-    WHERE a.status IN ('Confirmed','Completed')
-    GROUP BY a.appointment_id, p.first_name, p.last_name, r.lab_result_id, r.file_path, r.file_type, r.remarks, r.released_at ORDER BY a.appointment_date DESC")->fetchAll(PDO::FETCH_ASSOC);
+    $where_res
+    GROUP BY a.appointment_id, p.first_name, p.last_name, r.lab_result_id, r.file_path, r.file_type, r.remarks, r.released_at
+    ORDER BY a.appointment_date DESC
+    LIMIT ? OFFSET ?");
+$res_stmt->execute($params_page);
+$results = $res_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +103,36 @@ $results = $pdo->query("SELECT a.appointment_id, a.appointment_date, a.status as
         <div class="user-area"><span><?= htmlspecialchars($_SESSION['full_name'] ?? 'Admin') ?></span></div>
     </header>
 
+    <div class="page-body">
     <div class="panel">
+        <div class="toolbar">
+            <form method="GET" class="toolbar-left">
+                <input class="input search" name="q" placeholder="Search patient or test…" value="<?= htmlspecialchars($q_res) ?>">
+                <button class="btn btn-primary" type="submit">Search</button>
+                <?php if ($q_res): ?><a class="btn" href="index.php">Clear</a><?php endif; ?>
+            </form>
+            <span style="font-size:12px;color:var(--muted)"><?= $total ?> record<?= $total!=1?'s':'' ?> total</span>
+        </div>
+
+        <?php
+        $base_r = '?'.http_build_query(array_filter(['q'=>$q_res]));
+        if ($total_pages > 1): ?>
+        <div class="pagination">
+            <?php if ($page > 1): ?>
+            <a class="btn btn-sm" href="<?= $base_r ?>&page=<?= $page-1 ?>">‹ Prev</a>
+            <?php endif; ?>
+            <?php for ($p = max(1,$page-2); $p <= min($total_pages,$page+2); $p++): ?>
+            <a class="btn btn-sm <?= $p===$page?'btn-primary':'' ?>" href="<?= $base_r ?>&page=<?= $p ?>"><?= $p ?></a>
+            <?php endfor; ?>
+            <?php if ($page < $total_pages): ?>
+            <a class="btn btn-sm" href="<?= $base_r ?>&page=<?= $page+1 ?>">Next ›</a>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+        <p class="pagination-info">
+            Page <?= $page ?> of <?= $total_pages ?> &nbsp;·&nbsp; Showing <?= count($results) ?> of <?= $total ?> records
+        </p>
+
         <div class="table-card table-scroll">
         <table>
             <thead><tr><th>#</th><th>Patient</th><th>Test</th><th>Appt. Date</th><th>Result</th><th>Released</th><th>Action</th></tr></thead>
@@ -106,7 +166,11 @@ $results = $pdo->query("SELECT a.appointment_id, a.appointment_date, a.status as
         </table>
         </div>
     </div>
+    </div>
 </main>
+
+
+
 
 <dialog id="dlg-upload">
 <form method="POST" enctype="multipart/form-data">

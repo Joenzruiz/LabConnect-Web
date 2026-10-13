@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/email.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -48,6 +49,7 @@ try {
             'You have successfully cancelled your appointment. You may book a new one anytime.',
             'appointment'
         ]);
+    brevo_notify_patient($pdo, (int)$patientId, 'Appointment Cancelled', 'You have successfully cancelled your appointment. You may book a new one anytime.');
 
     echo json_encode(["success" => true, "message" => "Appointment cancelled successfully"]);
 

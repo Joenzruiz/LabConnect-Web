@@ -14,6 +14,8 @@ try {
     );
 
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->exec("SET TIME ZONE 'Asia/Manila'");
+    date_default_timezone_set('Asia/Manila');
 
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());

@@ -47,9 +47,9 @@ $days_label = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 <link rel="stylesheet" href="../../css/style.css">
 <style>
 .doctor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.doctor-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:20px; }
+.doctor-card { background: var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; box-shadow: var(--card-shadow); color: var(--text); }
 .doc-avatar { width:56px; height:56px; border-radius:50%; background:var(--teal-soft); color:var(--teal); display:grid; place-items:center; font-size:22px; font-weight:700; margin-bottom:12px; }
-.avail-badge { display:inline-block; background:var(--teal-soft); color:var(--teal-dark); border-radius:6px; padding:2px 6px; font-size:10px; font-weight:700; margin:2px; }
+.avail-badge { display:inline-block; background:var(--teal-soft); color:var(--teal); border-radius:6px; padding:2px 6px; font-size:10px; font-weight:700; margin:2px; }
 </style>
 </head>
 <body>

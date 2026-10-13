@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../../config/database.php';
+require_once '../../config/email.php';
 if (!in_array($_SESSION['user_role'] ?? '', ['admin','staff'])) { header('Location: ../../index.php'); exit; }
 
 // Quick approve/reject/complete
@@ -11,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($map[$action]) && $appt_id) {
         $pdo->prepare("UPDATE appointments SET status=?, approved_by=? WHERE appointment_id=?")
             ->execute([$map[$action], $_SESSION['user_id'], $appt_id]);
-        if ($action === 'approve' || $action === 'reject') {
+        if ($action === 'approve' || $action === 'reject' || $action === 'complete') {
             $appt = $pdo->prepare("SELECT a.patient_id, STRING_AGG(t.test_name,', ') as test_name, d.first_name||' '||d.last_name as doc, a.appointment_date, a.appointment_time FROM appointments a LEFT JOIN doctors d ON a.doctor_id=d.doctor_id LEFT JOIN appointment_details ad ON ad.appointment_id=a.appointment_id LEFT JOIN laboratory_tests t ON t.test_id=ad.test_id WHERE a.appointment_id=? GROUP BY a.patient_id, d.first_name, d.last_name, a.appointment_date, a.appointment_time");
             $appt->execute([$appt_id]);
             $appt = $appt->fetch(PDO::FETCH_ASSOC);
@@ -19,12 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($action === 'approve') {
                     $title = 'Appointment Confirmed';
                     $msg = "Your {$appt['test_name']} appointment".($appt['doc']?" with Dr. {$appt['doc']}":'')." on {$appt['appointment_date']} has been approved. Please arrive 15 minutes early.";
+                } elseif ($action === 'complete') {
+                    $title = 'Appointment Completed';
+                    $msg = "Your {$appt['test_name']} appointment on {$appt['appointment_date']} has been completed. Your lab results will be available shortly.";
                 } else {
                     $title = 'Appointment Cancelled';
                     $msg = "Your {$appt['test_name']} appointment on {$appt['appointment_date']} has been cancelled. Please contact us for more information or book a new schedule.";
                 }
                 $pdo->prepare("INSERT INTO notifications (patient_id,title,message,notification_type,is_read) VALUES (?,?,?,?,false)")
                     ->execute([$appt['patient_id'], $title, $msg, 'appointment']);
+                brevo_notify_patient($pdo, (int)$appt['patient_id'], $title, $msg);
             }
         }
     }
@@ -33,6 +38,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $status_filter = $_GET['status'] ?? '';
 $q = $_GET['q'] ?? '';
+$per_page = 10;
+$page = max(1, (int)($_GET['page'] ?? 1));
+$offset = ($page - 1) * $per_page;
+
+$where = "WHERE 1=1";
+$params = [];
+if ($status_filter) { $where .= " AND a.status=?"; $params[] = $status_filter; }
+if ($q) { $where .= " AND (p.first_name||' '||p.last_name ILIKE ? OR t.test_name ILIKE ?)"; $params[] = "%$q%"; $params[] = "%$q%"; }
+
+// Count query
+$count_sql = "SELECT COUNT(DISTINCT a.appointment_id) FROM appointments a JOIN patients p ON a.patient_id=p.patient_id LEFT JOIN appointment_details ad ON ad.appointment_id=a.appointment_id LEFT JOIN laboratory_tests t ON t.test_id=ad.test_id $where";
+$count_stmt = $pdo->prepare($count_sql);
+$count_stmt->execute($params);
+$total = (int)$count_stmt->fetchColumn();
+$total_pages = max(1, (int)ceil($total / $per_page));
 
 $sql = "SELECT a.*, p.first_name||' '||p.last_name as patient_name,
     COALESCE(d.first_name||' '||d.last_name,'—') as doctor_name,
@@ -43,11 +63,11 @@ $sql = "SELECT a.*, p.first_name||' '||p.last_name as patient_name,
     LEFT JOIN doctors d ON a.doctor_id=d.doctor_id
     LEFT JOIN appointment_details ad ON ad.appointment_id=a.appointment_id
     LEFT JOIN laboratory_tests t ON t.test_id=ad.test_id
-    WHERE 1=1";
-$params = [];
-if ($status_filter) { $sql .= " AND a.status=?"; $params[] = $status_filter; }
-if ($q) { $sql .= " AND (p.first_name||' '||p.last_name ILIKE ? OR t.test_name ILIKE ?)"; $params[] = "%$q%"; $params[] = "%$q%"; }
-$sql .= " GROUP BY a.appointment_id, p.first_name, p.last_name, d.first_name, d.last_name ORDER BY a.created_at DESC, a.appointment_id DESC";
+    $where
+    GROUP BY a.appointment_id, p.first_name, p.last_name, d.first_name, d.last_name ORDER BY a.created_at DESC, a.appointment_id DESC
+    LIMIT ? OFFSET ?";
+$params[] = $per_page;
+$params[] = $offset;
 
 $appts = $pdo->prepare($sql);
 $appts->execute($params);
@@ -70,6 +90,7 @@ $status_badge = ['Pending'=>'badge-pending','Confirmed'=>'badge-confirmed','Comp
         <div class="user-area"><span><?= htmlspecialchars($_SESSION['full_name'] ?? 'Admin') ?></span></div>
     </header>
 
+    <div class="page-body">
     <div class="panel">
         <div class="toolbar">
             <form method="GET" class="toolbar-left" style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -83,7 +104,27 @@ $status_badge = ['Pending'=>'badge-pending','Confirmed'=>'badge-confirmed','Comp
                 <button class="btn btn-primary">Search</button>
                 <?php if ($q||$status_filter): ?><a class="btn" href="index.php">Clear</a><?php endif; ?>
             </form>
+            <span style="font-size:12px;color:var(--muted)"><?= $total ?> record<?= $total!=1?'s':'' ?> total</span>
         </div>
+
+        <?php
+        $base = '?'.http_build_query(array_filter(['q'=>$q,'status'=>$status_filter]));
+        if ($total_pages > 1): ?>
+        <div class="pagination">
+            <?php if ($page > 1): ?>
+            <a class="btn btn-sm" href="<?= $base ?>&page=<?= $page-1 ?>">‹ Prev</a>
+            <?php endif; ?>
+            <?php for ($p = max(1,$page-2); $p <= min($total_pages,$page+2); $p++): ?>
+            <a class="btn btn-sm <?= $p===$page?'btn-primary':'' ?>" href="<?= $base ?>&page=<?= $p ?>"><?= $p ?></a>
+            <?php endfor; ?>
+            <?php if ($page < $total_pages): ?>
+            <a class="btn btn-sm" href="<?= $base ?>&page=<?= $page+1 ?>">Next ›</a>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+        <p class="pagination-info">
+            Page <?= $page ?> of <?= $total_pages ?> &nbsp;·&nbsp; Showing <?= count($appts) ?> of <?= $total ?> appointments
+        </p>
 
         <div class="table-card table-scroll">
         <table>
@@ -117,5 +158,9 @@ $status_badge = ['Pending'=>'badge-pending','Confirmed'=>'badge-confirmed','Comp
         </table>
         </div>
     </div>
+    </div>
 </main>
 </body></html>
+
+
+

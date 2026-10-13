@@ -56,8 +56,8 @@ if ($next_month > 12) { $next_month = 1; $next_year++; }
 <style>
 .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
 .cal-head { background:var(--teal); color:#fff; text-align:center; padding:8px 4px; font-size:12px; font-weight:600; }
-.cal-day { background:#fff; min-height:80px; padding:6px; font-size:12px; }
-.cal-day.today { background:#f0fdfa; }
+.cal-day { background:var(--surface); min-height:80px; padding:6px; font-size:12px; color:var(--text); }
+.cal-day.today { background:rgba(20,184,166,0.12); }
 .cal-day.empty { background:var(--bg); }
 .cal-day-num { font-weight:600; color:var(--muted); margin-bottom:4px; }
 .cal-pill { border-radius:4px; padding:2px 6px; font-size:10px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
