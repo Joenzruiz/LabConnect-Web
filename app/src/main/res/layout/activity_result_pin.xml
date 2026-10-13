@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="Security Check"
+        app:titleTextColor="@color/colorTextPrimary"
+        app:navigationIconTint="@color/colorTextPrimary"
+        app:elevation="0dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="40dp">
+
+            <!-- Lock Icon -->
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_lock"
+                app:tint="@color/colorPrimary" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvPinTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Enter Result PIN"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/tvPinDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Enter your 4-digit PIN to view your laboratory results."
+                android:textAlignment="center"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp"
+                android:lineSpacingExtra="2dp" />
+
+            <!-- Current PIN Box -->
+            <TextView
+                android:id="@+id/tvCurrentPinLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Current PIN"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/etPin"
+                android:layout_width="220dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/pin_input_bg"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:letterSpacing="1.2"
+                android:textSize="26sp"
+                android:textColor="@color/colorPrimary"
+                android:hint="••••"
+                android:textColorHint="#94A3B8"
+                android:textCursorDrawable="@null" />
+
+            <!-- New PIN section (change mode) -->
+            <LinearLayout
+                android:id="@+id/newPinSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New PIN"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1" />
+
+                <EditText
+                    android:id="@+id/etNewPin"
+                    android:layout_width="220dp"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/pin_input_bg"
+                    android:gravity="center"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:letterSpacing="1.2"
+                    android:textSize="26sp"
+                    android:textColor="@color/colorPrimary"
+                    android:hint="••••"
+                    android:textColorHint="#94A3B8"
+                    android:textCursorDrawable="@null" />
+            </LinearLayout>
+
+            <!-- Verify / Update button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVerify"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="36dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Verify PIN"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:cornerRadius="12dp" />
+
+            <!-- Forgot PIN link -->
+            <TextView
+                android:id="@+id/tvForgotPin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:padding="8dp"
+                android:text="Forgot PIN? Reset via email"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
