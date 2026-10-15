@@ -197,7 +197,8 @@ $badges = ['Pending'=>'badge-pending','Confirmed'=>'badge-confirmed','Completed'
         </div>
     </header>
 
-    <div class="panel" style="margin:24px 28px;">
+    <div class="page-body">
+    <div class="panel">
         <div class="panel-header">
             <form method="GET" style="display:flex;gap:8px;flex-wrap:wrap;width:100%">
                 <input class="input search" name="q" placeholder="Search patient or test…" value="<?= htmlspecialchars($q) ?>" style="flex:1;min-width:200px">
@@ -256,6 +257,7 @@ $badges = ['Pending'=>'badge-pending','Confirmed'=>'badge-confirmed','Completed'
             </tbody>
         </table>
         </div>
+    </div>
     </div>
 </main>
 </body></html>

@@ -40,6 +40,7 @@ $cats = ['Clinical Diagnostics','X-Ray','Ultrasound'];
         <div class="user-area"><span><?= htmlspecialchars($_SESSION['full_name'] ?? 'Admin') ?></span></div>
     </header>
 
+    <div class="page-body">
     <div class="panel">
         <div class="toolbar">
             <form method="GET" class="toolbar-left">
@@ -77,6 +78,7 @@ $cats = ['Clinical Diagnostics','X-Ray','Ultrasound'];
             </tbody>
         </table>
         </div>
+    </div>
     </div>
 </main>
 

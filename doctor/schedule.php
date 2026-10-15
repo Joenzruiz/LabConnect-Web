@@ -81,7 +81,7 @@ if ($next_month > 12) { $next_month = 1; $next_year++; }
         </div>
     </header>
 
-    <div style="padding:24px 28px 0;">
+    <div class="page-body">
         <!-- Calendar nav -->
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
             <a href="?year=<?= $prev_year ?>&month=<?= $prev_month ?>" class="btn">← Prev</a>

@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="page-title"><h1>Settings</h1><p>Laboratory information and configuration.</p></div>
     </header>
 
+    <div class="page-body">
     <?php if ($saved): ?>
     <div class="alert" style="background:var(--success-soft);border-color:#b2d8c2;color:var(--success);margin-bottom:20px;">✅ Settings saved successfully.</div>
     <?php endif; ?>
@@ -48,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="field"><label>Footer Note</label><textarea class="input textarea" name="footer_note" rows="3"><?= htmlspecialchars($settings['footer_note'] ?? '') ?></textarea></div>
             <div class="form-actions"><button type="submit" class="btn btn-primary">Save Settings</button></div>
         </form>
+    </div>
     </div>
 </main>
 </body></html>

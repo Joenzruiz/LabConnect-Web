@@ -64,6 +64,7 @@ $users = $pdo->query("SELECT * FROM users WHERE role != 'Patient' ORDER BY creat
         <button class="btn btn-primary" onclick="document.getElementById('dlg-add').showModal()">+ Add User</button>
     </header>
 
+    <div class="page-body">
     <div class="panel">
         <div class="table-card table-scroll">
         <table>
@@ -96,6 +97,7 @@ $users = $pdo->query("SELECT * FROM users WHERE role != 'Patient' ORDER BY creat
             </tbody>
         </table>
         </div>
+    </div>
     </div>
 </main>
 

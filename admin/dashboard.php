@@ -93,6 +93,7 @@ $month_names = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','
         </div>
     </header>
 
+    <div class="page-body">
     <!-- Stat Cards -->
     <div class="cards">
         <div class="card">
@@ -184,6 +185,7 @@ $month_names = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','
         <?php else: ?>
         <p class="empty">🎉 No pending appointments. All caught up!</p>
         <?php endif; ?>
+    </div>
     </div>
 </main>
 </body></html>

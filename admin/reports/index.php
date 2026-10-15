@@ -69,6 +69,7 @@ $rows = $rows->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </header>
 
+    <div class="page-body">
     <!-- Filters -->
     <form method="GET" class="panel no-print" style="margin-bottom:20px;">
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
@@ -115,5 +116,6 @@ $rows = $rows->fetchAll(PDO::FETCH_ASSOC);
         </table>
         </div>
     </div>
+</div>
 </main>
 </body></html>

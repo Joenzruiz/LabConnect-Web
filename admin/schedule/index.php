@@ -93,14 +93,15 @@ $status_class = ['Awaiting doctor'=>'badge-pending','Confirmed'=>'badge-confirme
         </div>
     </header>
 
+    <div class="page-body">
     <!-- Calendar -->
-    <div class="panel" style="margin-bottom:24px;">
-        <div class="cal-nav" style="padding:16px 20px 0;">
+    <div class="panel" style="margin-bottom:24px; padding:20px;">
+        <div class="cal-nav">
             <a class="btn" href="?year=<?= $prev_year ?>&month=<?= $prev_month ?>">‹ Previous</a>
             <h2><?= date('F Y', $first) ?></h2>
             <a class="btn" href="?year=<?= $next_year ?>&month=<?= $next_month ?>">Next ›</a>
         </div>
-        <div style="padding:16px 20px;">
+        <div>
         <div class="cal-grid">
             <?php foreach (['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $h): ?>
             <div class="cal-head"><?= $h ?></div>
@@ -198,6 +199,7 @@ $status_class = ['Awaiting doctor'=>'badge-pending','Confirmed'=>'badge-confirme
             <p style="padding:24px;text-align:center;color:var(--muted);">No duty blocks scheduled for today.</p>
             <?php endif; ?>
         </div>
+    </div>
     </div>
 
 </main>

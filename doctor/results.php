@@ -119,13 +119,14 @@ $badges = ['Pending'=>'badge-pending','Confirmed'=>'badge-confirmed','Completed'
         </div>
     </header>
 
+    <div class="page-body">
     <?php if (($_GET['success'] ?? '') === '1'): ?>
-    <div style="margin:16px 28px 0;padding:12px 18px;background:#dcfce7;border:1px solid #86efac;border-radius:8px;color:#15803d;font-weight:500;">
+    <div style="margin-bottom:16px;padding:12px 18px;background:#dcfce7;border:1px solid #86efac;border-radius:8px;color:#15803d;font-weight:500;">
         ✅ Result uploaded successfully!
     </div>
     <?php endif; ?>
 
-    <div class="panel" style="margin:24px 28px;">
+    <div class="panel">
         <div class="table-card table-scroll">
         <table>
             <thead>
@@ -174,6 +175,7 @@ $badges = ['Pending'=>'badge-pending','Confirmed'=>'badge-confirmed','Completed'
             </tbody>
         </table>
         </div>
+    </div>
     </div>
 </main>
 

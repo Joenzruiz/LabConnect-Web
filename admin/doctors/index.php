@@ -66,6 +66,7 @@ $days_label = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
         </div>
     </header>
 
+    <div class="page-body">
     <div class="doctor-grid">
     <?php foreach ($doctors as $d): ?>
     <?php $initials = strtoupper(substr($d['first_name'],0,1).substr($d['last_name'],0,1)); ?>
@@ -91,6 +92,7 @@ $days_label = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     </div>
     <?php endforeach; ?>
     <?php if (!$doctors): ?><p class="empty" style="grid-column:1/-1">No doctors found.</p><?php endif; ?>
+    </div>
     </div>
 </main>
 

@@ -158,10 +158,9 @@ button {
 .content {
   margin-left: 246px;
   padding: 0;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .topbar {
@@ -175,22 +174,10 @@ button {
   flex-shrink: 0;
 }
 
-/* Scrollable body area below the topbar */
+/* Page body area below the topbar */
 .page-body {
   flex: 1;
-  overflow-y: auto;
   padding: 24px 32px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-/* Panel fills available height on list pages */
-.page-body > .panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
 }
 
 .page-title h1 {
