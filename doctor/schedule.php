@@ -52,8 +52,10 @@ if ($next_month > 12) { $next_month = 1; $next_year++; }
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Schedule — <?= htmlspecialchars($doc_name) ?></title>
-<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/style.css?v=<?= time() ?>">
 <style>
+.content { min-height:100vh !important; height:auto !important; overflow:visible !important; }
+.page-body { display:block !important; flex:none !important; height:auto !important; min-height:auto !important; overflow:visible !important; padding:24px 32px !important; }
 .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
 .cal-head { background:var(--teal); color:#fff; text-align:center; padding:8px 4px; font-size:12px; font-weight:600; }
 .cal-day { background:var(--surface); min-height:80px; padding:6px; font-size:12px; color:var(--text); }

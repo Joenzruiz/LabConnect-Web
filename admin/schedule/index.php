@@ -63,8 +63,14 @@ $status_class = ['Awaiting doctor'=>'badge-pending','Confirmed'=>'badge-confirme
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Schedule - SLIMM Lab</title>
-<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/style.css?v=<?= time() ?>">
 <style>
+/* Prevent any stale browser cache or flex collapse */
+.content { min-height:100vh !important; height:auto !important; overflow:visible !important; }
+.page-body { display:block !important; flex:none !important; height:auto !important; min-height:auto !important; overflow:visible !important; padding:24px 32px !important; }
+.page-body > .panel { display:block !important; flex:none !important; height:auto !important; min-height:auto !important; margin-bottom:24px !important; }
+.grid-2 { display:grid !important; grid-template-columns:1fr 1fr !important; gap:18px !important; clear:both !important; margin-bottom:24px !important; position:relative !important; }
+
 .cal-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
 .cal-nav h2 { margin:0; font-size:20px; font-weight:700; color:var(--text); }
 .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); border-top:1px solid var(--border); border-left:1px solid var(--border); border-radius:8px; overflow:hidden; }
@@ -95,13 +101,12 @@ $status_class = ['Awaiting doctor'=>'badge-pending','Confirmed'=>'badge-confirme
 
     <div class="page-body">
     <!-- Calendar -->
-    <div class="panel" style="margin-bottom:24px; padding:20px;">
+    <div class="panel" style="margin-bottom:24px; padding:20px; display:block;">
         <div class="cal-nav">
             <a class="btn" href="?year=<?= $prev_year ?>&month=<?= $prev_month ?>">‹ Previous</a>
             <h2><?= date('F Y', $first) ?></h2>
             <a class="btn" href="?year=<?= $next_year ?>&month=<?= $next_month ?>">Next ›</a>
         </div>
-        <div>
         <div class="cal-grid">
             <?php foreach (['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $h): ?>
             <div class="cal-head"><?= $h ?></div>
@@ -128,7 +133,6 @@ $status_class = ['Awaiting doctor'=>'badge-pending','Confirmed'=>'badge-confirme
                 <?php endforeach; ?>
             </div>
             <?php endfor; ?>
-        </div>
         </div>
     </div>
 
