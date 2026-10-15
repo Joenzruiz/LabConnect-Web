@@ -31,8 +31,12 @@ public class LabResult {
         this.status = status;
     }
 
+    @SerializedName("doctor_name")
+    private String doctorName;
+
     public int getId() { return id; }
     public String getTestName() { return testName; }
     public String getDate() { return date; }
     public String getPdfUrl() { return pdfUrl; }
+    public String getDoctorName() { return doctorName; }
 }

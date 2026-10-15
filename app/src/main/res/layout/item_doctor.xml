@@ -45,7 +45,7 @@
                 android:id="@+id/tvDoctorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dr. Elena Reyes"
+                android:text="Dr. John Ruiz"
                 android:textColor="@color/colorTextPrimary"
                 android:textStyle="bold"
                 android:textSize="15sp" />
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Clinical Pathology"
+                android:text="Pathology"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="12sp" />
         </LinearLayout>

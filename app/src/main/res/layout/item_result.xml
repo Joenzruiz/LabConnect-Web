@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="Sep 11, 2026 · Dr. Elena Reyes"
+                    android:text="Sep 11, 2026 • Dr. John Ruiz"
                     android:textColor="@color/colorTextSecondary"
                     android:textSize="11sp" />
             </LinearLayout>

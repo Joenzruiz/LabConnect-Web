@@ -36,7 +36,11 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         LabResult result = results.get(position);
         holder.tvTestName.setText(result.getTestName());
-        holder.tvDate.setText("Completed • " + result.getDate());
+        String dateDoc = "Completed • " + result.getDate();
+        if (result.getDoctorName() != null && !result.getDoctorName().isEmpty()) {
+            dateDoc += " • " + result.getDoctorName();
+        }
+        holder.tvDate.setText(dateDoc);
         holder.itemView.setOnClickListener(v -> listener.onResultClick(result));
     }
 

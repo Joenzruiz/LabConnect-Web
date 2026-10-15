@@ -49,10 +49,15 @@ public class ResultDetailsActivity extends AppCompatActivity {
 
         tvDetailPatientName.setText(savedName);
 
+        TextView tvDetailDoctor = findViewById(R.id.tvDetailDoctor);
+        String doctorName = getIntent().getStringExtra("doctor");
         String dateStr = getIntent().getStringExtra("date");
 
         if (testName != null) tvDetailTestName.setText(testName);
         if (dateStr != null) tvDetailDate.setText("Completed on " + dateStr);
+        if (tvDetailDoctor != null && doctorName != null && !doctorName.isEmpty()) {
+            tvDetailDoctor.setText(doctorName);
+        }
 
         btnUnlockResult.setOnClickListener(v -> {
             String inputPin = etUnlockPin.getText().toString().trim();

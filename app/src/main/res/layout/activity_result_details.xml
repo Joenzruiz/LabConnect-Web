@@ -122,7 +122,7 @@
                     android:id="@+id/tvDetailDoctor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dr. Elena Reyes"
+                    android:text="Dr. John Ruiz"
                     android:textColor="#424242"
                     android:textSize="14sp" />
             </LinearLayout>

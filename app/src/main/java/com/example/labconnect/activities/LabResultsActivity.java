@@ -98,6 +98,7 @@ public class LabResultsActivity extends AppCompatActivity {
                         Intent intent = new Intent(LabResultsActivity.this, ResultDetailsActivity.class);
                         intent.putExtra("testName", result.getTestName());
                         intent.putExtra("date", result.getDate());
+                        intent.putExtra("doctor", result.getDoctorName());
                         intent.putExtra("pdf_url", result.getPdfUrl());
                         startActivity(intent);
                     });
