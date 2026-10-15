@@ -26,9 +26,13 @@ try {
                 JOIN laboratory_tests lt ON ad.test_id = lt.test_id 
                 WHERE ad.appointment_id = a.appointment_id) AS test_name,
                r.file_path AS pdf_url, 
-               'Released' AS status
+               'Released' AS status,
+               COALESCE('Dr. ' || d.first_name || ' ' || d.last_name, (
+                   SELECT 'Dr. ' || first_name || ' ' || last_name FROM doctors ORDER BY doctor_id ASC LIMIT 1
+               ), 'SLIMM Laboratory') AS doctor_name
         FROM lab_results r
         JOIN appointments a ON r.appointment_id = a.appointment_id
+        LEFT JOIN doctors d ON a.doctor_id = d.doctor_id
         WHERE a.patient_id = :patient_id
         ORDER BY a.appointment_date DESC, r.created_at DESC
     ");
