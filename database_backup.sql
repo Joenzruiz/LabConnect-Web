@@ -2,7 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict ryPb1XANIZlrkFoIWmUmQ62oZBbGIFhU2MOxLHLahOxKD2g7U4gtLKkFTPKzuyj
 
 -- Dumped from database version 18.6
 -- Dumped by pg_dump version 18.6
@@ -101,7 +100,6 @@ CREATE TABLE public.announcements (
 );
 
 
-ALTER TABLE public.announcements OWNER TO postgres;
 
 --
 -- Name: announcements_announcement_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -116,7 +114,6 @@ CREATE SEQUENCE public.announcements_announcement_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.announcements_announcement_id_seq OWNER TO postgres;
 
 --
 -- Name: announcements_announcement_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -138,7 +135,6 @@ CREATE TABLE public.appointment_details (
 );
 
 
-ALTER TABLE public.appointment_details OWNER TO postgres;
 
 --
 -- Name: appointment_details_appointment_detail_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -175,7 +171,6 @@ CREATE TABLE public.appointments (
 );
 
 
-ALTER TABLE public.appointments OWNER TO postgres;
 
 --
 -- Name: appointments_appointment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -205,7 +200,6 @@ CREATE TABLE public.audit_logs (
 );
 
 
-ALTER TABLE public.audit_logs OWNER TO postgres;
 
 --
 -- Name: audit_logs_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -220,7 +214,6 @@ CREATE SEQUENCE public.audit_logs_log_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.audit_logs_log_id_seq OWNER TO postgres;
 
 --
 -- Name: audit_logs_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -244,7 +237,6 @@ CREATE TABLE public.bills (
 );
 
 
-ALTER TABLE public.bills OWNER TO postgres;
 
 --
 -- Name: bills_bill_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -281,7 +273,6 @@ CREATE TABLE public.doctor_schedule_blocks (
 );
 
 
-ALTER TABLE public.doctor_schedule_blocks OWNER TO postgres;
 
 --
 -- Name: doctor_schedule_blocks_schedule_block_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -313,7 +304,6 @@ CREATE TABLE public.doctor_weekly_availability (
 );
 
 
-ALTER TABLE public.doctor_weekly_availability OWNER TO postgres;
 
 --
 -- Name: doctor_weekly_availability_weekly_availability_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -346,7 +336,6 @@ CREATE TABLE public.doctors (
 );
 
 
-ALTER TABLE public.doctors OWNER TO postgres;
 
 --
 -- Name: doctors_doctor_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -378,7 +367,6 @@ CREATE TABLE public.lab_results (
 );
 
 
-ALTER TABLE public.lab_results OWNER TO postgres;
 
 --
 -- Name: lab_results_lab_result_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -411,7 +399,6 @@ CREATE TABLE public.laboratory_tests (
 );
 
 
-ALTER TABLE public.laboratory_tests OWNER TO postgres;
 
 --
 -- Name: laboratory_tests_test_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -442,7 +429,6 @@ CREATE TABLE public.notifications (
 );
 
 
-ALTER TABLE public.notifications OWNER TO postgres;
 
 --
 -- Name: notifications_notification_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -473,7 +459,6 @@ CREATE TABLE public.otp_codes (
 );
 
 
-ALTER TABLE public.otp_codes OWNER TO postgres;
 
 --
 -- Name: otp_codes_otp_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -488,7 +473,6 @@ CREATE SEQUENCE public.otp_codes_otp_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.otp_codes_otp_id_seq OWNER TO postgres;
 
 --
 -- Name: otp_codes_otp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -518,7 +502,6 @@ CREATE TABLE public.patients (
 );
 
 
-ALTER TABLE public.patients OWNER TO postgres;
 
 --
 -- Name: patients_patient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -549,7 +532,6 @@ CREATE TABLE public.payments (
 );
 
 
-ALTER TABLE public.payments OWNER TO postgres;
 
 --
 -- Name: payments_payment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -582,7 +564,6 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
 
 --
 -- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -623,167 +604,137 @@ ALTER TABLE ONLY public.otp_codes ALTER COLUMN otp_id SET DEFAULT nextval('publi
 -- Data for Name: announcements; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.announcements (announcement_id, title, description, image_url, is_active, created_at) FROM stdin;
-1	Welcome to SLIMM Laboratory	We are now fully operational and ready to serve you. Book your appointments online.	\N	t	2026-09-26 12:49:30.730411
-\.
+INSERT INTO public.announcements (announcement_id, title, description, image_url, is_active, created_at) VALUES (1, 'Welcome to SLIMM Laboratory', 'We are now fully operational and ready to serve you. Book your appointments online.', NULL, true, '2026-09-26 12:49:30.730411');
 
 
 --
 -- Data for Name: appointment_details; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.appointment_details (appointment_detail_id, appointment_id, test_id, price_at_booking) FROM stdin;
-2	2	2	300.00
-3	3	2	500.00
-4	4	3	800.00
-\.
+INSERT INTO public.appointment_details (appointment_detail_id, appointment_id, test_id, price_at_booking) OVERRIDING SYSTEM VALUE VALUES (2, 2, 2, 300.00);
+INSERT INTO public.appointment_details (appointment_detail_id, appointment_id, test_id, price_at_booking) OVERRIDING SYSTEM VALUE VALUES (3, 3, 2, 500.00);
+INSERT INTO public.appointment_details (appointment_detail_id, appointment_id, test_id, price_at_booking) OVERRIDING SYSTEM VALUE VALUES (4, 4, 3, 800.00);
 
 
 --
 -- Data for Name: appointments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.appointments (appointment_id, patient_id, doctor_id, appointment_date, appointment_time, status, notes, approved_by, approved_at, created_at, updated_at, expected_result_date) FROM stdin;
-2	2	1	2026-10-15	09:00:00	Completed	\N	5	2026-10-15 18:52:35.992928	2026-10-15 18:51:53.007548	2026-10-15 18:53:24.397585	\N
-3	3	1	2026-10-15	08:30:00	Pending	\N	\N	\N	2026-10-15 19:41:25.210949	2026-10-15 19:41:25.210949	\N
-4	3	14	2026-10-19	10:30:00	Completed	\N	30	2026-10-15 19:49:20.681566	2026-10-15 19:48:55.401681	2026-10-15 19:50:04.380082	\N
-\.
+INSERT INTO public.appointments (appointment_id, patient_id, doctor_id, appointment_date, appointment_time, status, notes, approved_by, approved_at, created_at, updated_at, expected_result_date) OVERRIDING SYSTEM VALUE VALUES (2, 2, 1, '2026-10-15', '09:00:00', 'Completed', NULL, 5, '2026-10-15 18:52:35.992928', '2026-10-15 18:51:53.007548', '2026-10-15 18:53:24.397585', NULL);
+INSERT INTO public.appointments (appointment_id, patient_id, doctor_id, appointment_date, appointment_time, status, notes, approved_by, approved_at, created_at, updated_at, expected_result_date) OVERRIDING SYSTEM VALUE VALUES (3, 3, 1, '2026-10-15', '08:30:00', 'Pending', NULL, NULL, NULL, '2026-10-15 19:41:25.210949', '2026-10-15 19:41:25.210949', NULL);
+INSERT INTO public.appointments (appointment_id, patient_id, doctor_id, appointment_date, appointment_time, status, notes, approved_by, approved_at, created_at, updated_at, expected_result_date) OVERRIDING SYSTEM VALUE VALUES (4, 3, 14, '2026-10-19', '10:30:00', 'Completed', NULL, 30, '2026-10-15 19:49:20.681566', '2026-10-15 19:48:55.401681', '2026-10-15 19:50:04.380082', NULL);
 
 
 --
 -- Data for Name: audit_logs; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.audit_logs (log_id, user_id, action, details, ip_address, created_at) FROM stdin;
-1	1	BOOK_APPOINTMENT	Booked appointment #1 for Blood Typing on 2026-10-17	\N	2026-10-15 16:26:34.558822
-2	2	BOOK_APPOINTMENT	Booked appointment #2 for Blood Typing on 2026-10-15	\N	2026-10-15 18:51:53.007548
-3	3	BOOK_APPOINTMENT	Booked appointment #3 for Blood Typing on 2026-10-15	\N	2026-10-15 19:41:25.210949
-4	3	BOOK_APPOINTMENT	Booked appointment #4 for Chest X-Ray on 2026-10-19	\N	2026-10-15 19:48:55.401681
-\.
+INSERT INTO public.audit_logs (log_id, user_id, action, details, ip_address, created_at) VALUES (1, 1, 'BOOK_APPOINTMENT', 'Booked appointment #1 for Blood Typing on 2026-10-17', NULL, '2026-10-15 16:26:34.558822');
+INSERT INTO public.audit_logs (log_id, user_id, action, details, ip_address, created_at) VALUES (2, 2, 'BOOK_APPOINTMENT', 'Booked appointment #2 for Blood Typing on 2026-10-15', NULL, '2026-10-15 18:51:53.007548');
+INSERT INTO public.audit_logs (log_id, user_id, action, details, ip_address, created_at) VALUES (3, 3, 'BOOK_APPOINTMENT', 'Booked appointment #3 for Blood Typing on 2026-10-15', NULL, '2026-10-15 19:41:25.210949');
+INSERT INTO public.audit_logs (log_id, user_id, action, details, ip_address, created_at) VALUES (4, 3, 'BOOK_APPOINTMENT', 'Booked appointment #4 for Chest X-Ray on 2026-10-19', NULL, '2026-10-15 19:48:55.401681');
 
 
 --
 -- Data for Name: bills; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.bills (bill_id, appointment_id, total_amount, status, created_at) FROM stdin;
-\.
 
 
 --
 -- Data for Name: doctor_schedule_blocks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.doctor_schedule_blocks (schedule_block_id, doctor_id, schedule_date, start_time, end_time, block_type, status, note, created_by, confirmed_at) FROM stdin;
-2	1	2026-10-15	08:00:00	10:00:00	Whole Day	Confirmed		1	2026-10-15 16:14:04.174164
-1	1	2026-10-16	08:00:00	17:00:00	Whole Day	Confirmed		1	2026-10-15 16:14:06.971482
-3	1	2026-10-16	07:00:00	12:00:00	Morning	Confirmed		1	2026-10-15 16:23:43.648902
-4	1	2026-10-17	08:00:00	12:00:00	Morning	Confirmed		1	2026-10-15 16:26:13.07427
-5	1	2026-10-19	09:00:00	15:00:00	Whole Day	Awaiting doctor		1	\N
-6	14	2026-10-19	08:00:00	12:00:00	Morning	Confirmed		1	2026-10-15 19:48:23.481625
-\.
+INSERT INTO public.doctor_schedule_blocks (schedule_block_id, doctor_id, schedule_date, start_time, end_time, block_type, status, note, created_by, confirmed_at) OVERRIDING SYSTEM VALUE VALUES (2, 1, '2026-10-15', '08:00:00', '10:00:00', 'Whole Day', 'Confirmed', '', 1, '2026-10-15 16:14:04.174164');
+INSERT INTO public.doctor_schedule_blocks (schedule_block_id, doctor_id, schedule_date, start_time, end_time, block_type, status, note, created_by, confirmed_at) OVERRIDING SYSTEM VALUE VALUES (1, 1, '2026-10-16', '08:00:00', '17:00:00', 'Whole Day', 'Confirmed', '', 1, '2026-10-15 16:14:06.971482');
+INSERT INTO public.doctor_schedule_blocks (schedule_block_id, doctor_id, schedule_date, start_time, end_time, block_type, status, note, created_by, confirmed_at) OVERRIDING SYSTEM VALUE VALUES (3, 1, '2026-10-16', '07:00:00', '12:00:00', 'Morning', 'Confirmed', '', 1, '2026-10-15 16:23:43.648902');
+INSERT INTO public.doctor_schedule_blocks (schedule_block_id, doctor_id, schedule_date, start_time, end_time, block_type, status, note, created_by, confirmed_at) OVERRIDING SYSTEM VALUE VALUES (4, 1, '2026-10-17', '08:00:00', '12:00:00', 'Morning', 'Confirmed', '', 1, '2026-10-15 16:26:13.07427');
+INSERT INTO public.doctor_schedule_blocks (schedule_block_id, doctor_id, schedule_date, start_time, end_time, block_type, status, note, created_by, confirmed_at) OVERRIDING SYSTEM VALUE VALUES (5, 1, '2026-10-19', '09:00:00', '15:00:00', 'Whole Day', 'Awaiting doctor', '', 1, NULL);
+INSERT INTO public.doctor_schedule_blocks (schedule_block_id, doctor_id, schedule_date, start_time, end_time, block_type, status, note, created_by, confirmed_at) OVERRIDING SYSTEM VALUE VALUES (6, 14, '2026-10-19', '08:00:00', '12:00:00', 'Morning', 'Confirmed', '', 1, '2026-10-15 19:48:23.481625');
 
 
 --
 -- Data for Name: doctor_weekly_availability; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.doctor_weekly_availability (weekly_availability_id, doctor_id, day_of_week, start_time, end_time, is_active) FROM stdin;
-4	1	1	08:00:00	17:00:00	t
-5	1	2	13:00:00	17:00:00	t
-6	1	3	08:00:00	17:00:00	t
-24	14	0	08:00:00	17:00:00	t
-25	14	1	08:00:00	17:00:00	t
-\.
+INSERT INTO public.doctor_weekly_availability (weekly_availability_id, doctor_id, day_of_week, start_time, end_time, is_active) OVERRIDING SYSTEM VALUE VALUES (4, 1, 1, '08:00:00', '17:00:00', true);
+INSERT INTO public.doctor_weekly_availability (weekly_availability_id, doctor_id, day_of_week, start_time, end_time, is_active) OVERRIDING SYSTEM VALUE VALUES (5, 1, 2, '13:00:00', '17:00:00', true);
+INSERT INTO public.doctor_weekly_availability (weekly_availability_id, doctor_id, day_of_week, start_time, end_time, is_active) OVERRIDING SYSTEM VALUE VALUES (6, 1, 3, '08:00:00', '17:00:00', true);
+INSERT INTO public.doctor_weekly_availability (weekly_availability_id, doctor_id, day_of_week, start_time, end_time, is_active) OVERRIDING SYSTEM VALUE VALUES (24, 14, 0, '08:00:00', '17:00:00', true);
+INSERT INTO public.doctor_weekly_availability (weekly_availability_id, doctor_id, day_of_week, start_time, end_time, is_active) OVERRIDING SYSTEM VALUE VALUES (25, 14, 1, '08:00:00', '17:00:00', true);
 
 
 --
 -- Data for Name: doctors; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.doctors (doctor_id, user_id, first_name, last_name, email, phone, specialization, profile_picture, created_at) FROM stdin;
-1	5	John	Ruiz	johnruiz@gmail.com	09123456789	Pathology	\N	2026-09-28 02:53:30.07665
-14	30	Marvy	Segara	marvy@gmail.com	09123456789	Radtech	\N	2026-10-15 19:45:16.391806
-\.
+INSERT INTO public.doctors (doctor_id, user_id, first_name, last_name, email, phone, specialization, profile_picture, created_at) OVERRIDING SYSTEM VALUE VALUES (1, 5, 'John', 'Ruiz', 'johnruiz@gmail.com', '09123456789', 'Pathology', NULL, '2026-09-28 02:53:30.07665');
+INSERT INTO public.doctors (doctor_id, user_id, first_name, last_name, email, phone, specialization, profile_picture, created_at) OVERRIDING SYSTEM VALUE VALUES (14, 30, 'Marvy', 'Segara', 'marvy@gmail.com', '09123456789', 'Radtech', NULL, '2026-10-15 19:45:16.391806');
 
 
 --
 -- Data for Name: lab_results; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.lab_results (lab_result_id, file_path, file_type, remarks, released_by, released_at, created_at, appointment_id) FROM stdin;
-2	uploads/results/1792061604_dc3f1b80aecfff20f0c68be78a461119.jpg	image/jpeg		5	2026-10-15 18:53:24.386141	2026-10-15 18:53:24.386141	2
-3	uploads/results/1792065004_dc3f1b80aecfff20f0c68be78a461119.jpg	image/jpeg		30	2026-10-15 19:50:04.364844	2026-10-15 19:50:04.364844	4
-\.
+INSERT INTO public.lab_results (lab_result_id, file_path, file_type, remarks, released_by, released_at, created_at, appointment_id) OVERRIDING SYSTEM VALUE VALUES (2, 'uploads/results/1792061604_dc3f1b80aecfff20f0c68be78a461119.jpg', 'image/jpeg', '', 5, '2026-10-15 18:53:24.386141', '2026-10-15 18:53:24.386141', 2);
+INSERT INTO public.lab_results (lab_result_id, file_path, file_type, remarks, released_by, released_at, created_at, appointment_id) OVERRIDING SYSTEM VALUE VALUES (3, 'uploads/results/1792065004_dc3f1b80aecfff20f0c68be78a461119.jpg', 'image/jpeg', '', 30, '2026-10-15 19:50:04.364844', '2026-10-15 19:50:04.364844', 4);
 
 
 --
 -- Data for Name: laboratory_tests; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.laboratory_tests (test_id, test_name, category, price, preparation_instructions, is_active, created_at) FROM stdin;
-1	Complete Blood Count (CBC)	Clinical Diagnostics	500.00	No special preparation required.	t	2026-09-23 04:11:34.213666
-3	Chest X-Ray	X-Ray	800.00	Remove metal objects before the procedure.	t	2026-09-23 04:11:34.213666
-4	Abdominal Ultrasound	Ultrasound	1200.00	Follow laboratory fasting instructions before the procedure.	t	2026-09-23 04:11:34.213666
-2	Blood Typing	Clinical Diagnostics	500.00	No special preparation required.	t	2026-09-23 04:11:34.213666
-\.
+INSERT INTO public.laboratory_tests (test_id, test_name, category, price, preparation_instructions, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES (1, 'Complete Blood Count (CBC)', 'Clinical Diagnostics', 500.00, 'No special preparation required.', true, '2026-09-23 04:11:34.213666');
+INSERT INTO public.laboratory_tests (test_id, test_name, category, price, preparation_instructions, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES (3, 'Chest X-Ray', 'X-Ray', 800.00, 'Remove metal objects before the procedure.', true, '2026-09-23 04:11:34.213666');
+INSERT INTO public.laboratory_tests (test_id, test_name, category, price, preparation_instructions, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES (4, 'Abdominal Ultrasound', 'Ultrasound', 1200.00, 'Follow laboratory fasting instructions before the procedure.', true, '2026-09-23 04:11:34.213666');
+INSERT INTO public.laboratory_tests (test_id, test_name, category, price, preparation_instructions, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES (2, 'Blood Typing', 'Clinical Diagnostics', 500.00, 'No special preparation required.', true, '2026-09-23 04:11:34.213666');
 
 
 --
 -- Data for Name: notifications; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) FROM stdin;
-5	2	appointment	Appointment Booked	Your Blood Typing appointment is scheduled on 2026-10-15 at 09:00:00. Status: Pending.	t	2026-10-15 18:51:53.007548
-6	2	appointment	Appointment Confirmed	Your appointment has been confirmed by the doctor. See you soon!	t	2026-10-15 18:52:36.025598
-8	2	result	Lab Result Ready	Your lab result is now available in the SLIMM Lab app.	t	2026-10-15 18:53:24.405194
-7	2	appointment	Appointment Completed	Your appointment has been marked as Completed. Your lab results will be available shortly.	t	2026-10-15 18:52:49.717689
-11	3	appointment	Appointment Confirmed	Your appointment has been confirmed by the doctor. See you soon!	t	2026-10-15 19:49:20.710248
-10	3	appointment	Appointment Booked	Your Chest X-Ray appointment is scheduled on 2026-10-19 at 10:30:00. Status: Pending.	t	2026-10-15 19:48:55.401681
-9	3	appointment	Appointment Booked	Your Blood Typing appointment is scheduled on 2026-10-15 at 08:30:00. Status: Pending.	t	2026-10-15 19:41:25.210949
-12	3	appointment	Appointment Completed	Your appointment has been marked as Completed. Your lab results will be available shortly.	f	2026-10-15 19:49:44.41358
-13	3	result	Lab Result Ready	Your lab result is now available in the SLIMM Lab app.	f	2026-10-15 19:50:04.389771
-\.
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (5, 2, 'appointment', 'Appointment Booked', 'Your Blood Typing appointment is scheduled on 2026-10-15 at 09:00:00. Status: Pending.', true, '2026-10-15 18:51:53.007548');
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (6, 2, 'appointment', 'Appointment Confirmed', 'Your appointment has been confirmed by the doctor. See you soon!', true, '2026-10-15 18:52:36.025598');
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (8, 2, 'result', 'Lab Result Ready', 'Your lab result is now available in the SLIMM Lab app.', true, '2026-10-15 18:53:24.405194');
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (7, 2, 'appointment', 'Appointment Completed', 'Your appointment has been marked as Completed. Your lab results will be available shortly.', true, '2026-10-15 18:52:49.717689');
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (11, 3, 'appointment', 'Appointment Confirmed', 'Your appointment has been confirmed by the doctor. See you soon!', true, '2026-10-15 19:49:20.710248');
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (10, 3, 'appointment', 'Appointment Booked', 'Your Chest X-Ray appointment is scheduled on 2026-10-19 at 10:30:00. Status: Pending.', true, '2026-10-15 19:48:55.401681');
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (9, 3, 'appointment', 'Appointment Booked', 'Your Blood Typing appointment is scheduled on 2026-10-15 at 08:30:00. Status: Pending.', true, '2026-10-15 19:41:25.210949');
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (12, 3, 'appointment', 'Appointment Completed', 'Your appointment has been marked as Completed. Your lab results will be available shortly.', false, '2026-10-15 19:49:44.41358');
+INSERT INTO public.notifications (notification_id, patient_id, notification_type, title, message, is_read, created_at) OVERRIDING SYSTEM VALUE VALUES (13, 3, 'result', 'Lab Result Ready', 'Your lab result is now available in the SLIMM Lab app.', false, '2026-10-15 19:50:04.389771');
 
 
 --
 -- Data for Name: otp_codes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.otp_codes (otp_id, email, otp_code, type, expires_at, used, created_at) FROM stdin;
-\.
 
 
 --
 -- Data for Name: patients; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.patients (patient_id, user_id, first_name, last_name, email, phone, address, gender, birth_date, result_pin_hash, created_at, mobile) FROM stdin;
-2	28	Oiz		\N	\N	cebu	Male	2026-10-15	$2y$10$dTHqHe1dcuW4SyJC696/vumSJEs3yUFDcKFPSMAKoO6VgA5Ifjaby	2026-10-15 18:50:57.359389	09123456789
-3	29	Joenz	Ruiz	\N	\N	Cebu City	Male	2007-03-02	$2y$10$.k86Wtsr0WOajyzRN6regu3jtPc2hY3SXZBVuaFB5BhWsqWprxpcm	2026-10-15 19:33:32.334618	09123456789
-\.
+INSERT INTO public.patients (patient_id, user_id, first_name, last_name, email, phone, address, gender, birth_date, result_pin_hash, created_at, mobile) OVERRIDING SYSTEM VALUE VALUES (2, 28, 'Oiz', '', NULL, NULL, 'cebu', 'Male', '2026-10-15', '$2y$10$dTHqHe1dcuW4SyJC696/vumSJEs3yUFDcKFPSMAKoO6VgA5Ifjaby', '2026-10-15 18:50:57.359389', '09123456789');
+INSERT INTO public.patients (patient_id, user_id, first_name, last_name, email, phone, address, gender, birth_date, result_pin_hash, created_at, mobile) OVERRIDING SYSTEM VALUE VALUES (3, 29, 'Joenz', 'Ruiz', NULL, NULL, 'Cebu City', 'Male', '2007-03-02', '$2y$10$.k86Wtsr0WOajyzRN6regu3jtPc2hY3SXZBVuaFB5BhWsqWprxpcm', '2026-10-15 19:33:32.334618', '09123456789');
 
 
 --
 -- Data for Name: payments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.payments (payment_id, bill_id, amount, payment_method, reference_number, paid_at) FROM stdin;
-\.
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (user_id, email, password_hash, role, status, last_active, created_at) FROM stdin;
-5	johnruiz@gmail.com	$2y$10$irYAdRauX1CcNOD1gBqDYuzJ/y8mxqM8pbTGiECYEwn2BoYTCtA1O	Doctor	Active	2026-10-15 18:46:27.093551	2026-09-28 04:58:13.545298
-28	joenzsalibio@gmail.com	$2y$10$BxMG.M094ai.4pt2CpbHGO9BoIbOpQVZwHZriWGqeLaMAlTWUW/XS	Patient	Active	\N	2026-10-15 18:50:57.359389
-29	joenzgulfan@gmail.com	$2y$10$j9bOkIm0UTdOVyEztxwOeu9JOFbCi1P3GYfmydb2HiPLhENRlGJWq	Patient	Active	\N	2026-10-15 19:33:32.334618
-1	admin@slimmlaboratory.com	$2y$10$0lO05Idck4apttAu8D3/Zu.QQce3ZtU7zC2iNa3y9gQTONWWydy6e	Administrator	Active	2026-10-15 19:34:23.04745	2026-09-23 04:21:54.044363
-30	marvy@gmail.com	$2y$10$rxVTuvfu2VlwHtBpIDmc5OvITsMWTwcoSkpsTJUV/pFG0JfWBY/BS	Doctor	Active	2026-10-15 19:48:08.441517	2026-10-15 19:46:43.969659
-7	staff@slimmlaboratory.com	$2y$10$CkS/m3Zj.omBaakS30yEtuIZwoJuSQ98PAv/e.azVeEcnJKOx5dWu	Laboratory Staff	Active	2026-10-14 00:33:48.861073	2026-09-28 05:05:08.669803
-\.
+INSERT INTO public.users (user_id, email, password_hash, role, status, last_active, created_at) OVERRIDING SYSTEM VALUE VALUES (5, 'johnruiz@gmail.com', '$2y$10$irYAdRauX1CcNOD1gBqDYuzJ/y8mxqM8pbTGiECYEwn2BoYTCtA1O', 'Doctor', 'Active', '2026-10-15 18:46:27.093551', '2026-09-28 04:58:13.545298');
+INSERT INTO public.users (user_id, email, password_hash, role, status, last_active, created_at) OVERRIDING SYSTEM VALUE VALUES (28, 'joenzsalibio@gmail.com', '$2y$10$BxMG.M094ai.4pt2CpbHGO9BoIbOpQVZwHZriWGqeLaMAlTWUW/XS', 'Patient', 'Active', NULL, '2026-10-15 18:50:57.359389');
+INSERT INTO public.users (user_id, email, password_hash, role, status, last_active, created_at) OVERRIDING SYSTEM VALUE VALUES (29, 'joenzgulfan@gmail.com', '$2y$10$j9bOkIm0UTdOVyEztxwOeu9JOFbCi1P3GYfmydb2HiPLhENRlGJWq', 'Patient', 'Active', NULL, '2026-10-15 19:33:32.334618');
+INSERT INTO public.users (user_id, email, password_hash, role, status, last_active, created_at) OVERRIDING SYSTEM VALUE VALUES (1, 'admin@slimmlaboratory.com', '$2y$10$0lO05Idck4apttAu8D3/Zu.QQce3ZtU7zC2iNa3y9gQTONWWydy6e', 'Administrator', 'Active', '2026-10-15 19:34:23.04745', '2026-09-23 04:21:54.044363');
+INSERT INTO public.users (user_id, email, password_hash, role, status, last_active, created_at) OVERRIDING SYSTEM VALUE VALUES (30, 'marvy@gmail.com', '$2y$10$rxVTuvfu2VlwHtBpIDmc5OvITsMWTwcoSkpsTJUV/pFG0JfWBY/BS', 'Doctor', 'Active', '2026-10-15 19:48:08.441517', '2026-10-15 19:46:43.969659');
+INSERT INTO public.users (user_id, email, password_hash, role, status, last_active, created_at) OVERRIDING SYSTEM VALUE VALUES (7, 'staff@slimmlaboratory.com', '$2y$10$CkS/m3Zj.omBaakS30yEtuIZwoJuSQ98PAv/e.azVeEcnJKOx5dWu', 'Laboratory Staff', 'Active', '2026-10-14 00:33:48.861073', '2026-09-28 05:05:08.669803');
 
 
 --
@@ -1234,5 +1185,4 @@ ALTER TABLE ONLY public.payments
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ryPb1XANIZlrkFoIWmUmQ62oZBbGIFhU2MOxLHLahOxKD2g7U4gtLKkFTPKzuyj
 
