@@ -1,5 +1,12 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    # Seamlessly handle any request prefixed with LabConnect-Web
+    RewriteRule ^LabConnect-Web/(.*)$ /$1 [L,QSA]
+</IfModule>
+
 <IfModule mod_headers.c>
-    <FilesMatch "\.(css|js)$">
+    <FilesMatch "\.(css|js|jpg|jpeg|png|gif|svg)$">
         Header set Cache-Control "no-cache, no-store, must-revalidate"
         Header set Pragma "no-cache"
         Header set Expires 0

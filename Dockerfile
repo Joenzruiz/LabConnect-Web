@@ -9,8 +9,17 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache rewrite and headers modules
 RUN a2enmod rewrite headers
 
+# Allow .htaccess overrides in Apache
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
 # Copy application code
 COPY . /var/www/html/
+
+# Create symlink so /LabConnect-Web paths also resolve transparently
+RUN ln -s /var/www/html /var/www/html/LabConnect-Web
+
+# Ensure proper permissions
+RUN chmod -R 755 /var/www/html
 
 # Ensure uploads directory exists and is writable
 RUN mkdir -p /var/www/html/uploads/results && \
