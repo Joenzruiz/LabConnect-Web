@@ -52,19 +52,30 @@ if ($sslmode && $sslmode !== 'disable') {
     $dsn .= ";sslmode=$sslmode";
 }
 
-// Neon pooled connections require the endpoint option for SNI routing
-if (strpos($host, 'neon.tech') !== false) {
-    $endpoint = explode('.', $host)[0];
-    $endpoint = str_replace('-pooler', '', $endpoint);
-    $dsn .= ";options='endpoint=$endpoint'";
-}
-
 try {
-    $pdo = new PDO($dsn, $username, $password, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_TIMEOUT => 15,
-    ]);
+    // Attempt standard connection first (works cleanly on Linux/Render with native SNI)
+    try {
+        $pdo = new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_TIMEOUT => 15,
+        ]);
+    } catch (PDOException $e) {
+        // Fallback for older libpq without SNI (requires endpoint option)
+        if (strpos($e->getMessage(), 'Endpoint ID is not specified') !== false && strpos($host, 'neon.tech') !== false) {
+            $endpoint = explode('.', $host)[0];
+            $endpoint = str_replace('-pooler', '', $endpoint);
+            $dsnRetry = $dsn . ";options='endpoint=$endpoint'";
+            $pdo = new PDO($dsnRetry, $username, $password, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_TIMEOUT => 15,
+            ]);
+        } else {
+            throw $e;
+        }
+    }
+
     $pdo->exec("SET TIME ZONE 'Asia/Manila'");
     date_default_timezone_set('Asia/Manila');
 
