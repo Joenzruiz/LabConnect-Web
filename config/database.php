@@ -6,8 +6,8 @@ if ($dbUrl) {
     $host     = $parts['host'] ?? 'localhost';
     $port     = $parts['port'] ?? '5432';
     $dbname   = ltrim($parts['path'] ?? '/labconnect', '/');
-    $username = $parts['user'] ?? 'postgres';
-    $password = $parts['pass'] ?? 'root';
+    $username = isset($parts['user']) ? urldecode($parts['user']) : 'postgres';
+    $password = isset($parts['pass']) ? urldecode($parts['pass']) : 'root';
     $sslmode  = 'require';
 } else {
     $host     = getenv('DB_HOST')     ?: "localhost";
