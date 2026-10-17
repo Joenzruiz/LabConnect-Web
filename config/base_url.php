@@ -1,11 +1,12 @@
 <?php
-// Dynamically set BASE_URL depending on the request path.
-// When the application is served from a sub‑folder (e.g. /LabConnect-Web) we need that prefix.
-// Otherwise, for root deployments (e.g. Render.com), use an empty string.
-$script = $_SERVER['SCRIPT_NAME'] ?? '';
-if (strpos($script, '/LabConnect-Web/') !== false) {
-    define('BASE_URL', '/LabConnect-Web');
-} else {
-    define('BASE_URL', '');
+// Dynamically set BASE_URL based on the server hostname.
+// On localhost (XAMPP), the app lives under /LabConnect-Web.
+// On Render (or any remote server), the app is at the root.
+if (!defined('BASE_URL')) {
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
+        define('BASE_URL', '/LabConnect-Web');
+    } else {
+        define('BASE_URL', '');
+    }
 }
-?>
