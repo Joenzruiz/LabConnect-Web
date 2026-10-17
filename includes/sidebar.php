@@ -6,7 +6,7 @@ $current = $_SERVER['PHP_SELF'];
 
 function nav($href, $iconSvg, $label, $current) {
     $active = strpos($current, $href) !== false ? 'active' : '';
-    return "<a href=\"$href\" class=\"$active\"><span class="nav-icon">$iconSvg</span><span>$label</span></a>";
+    return "<a href=\"$href\" class=\"$active\"><span class=\"nav-icon\">$iconSvg</span><span>$label</span></a>";
 }
 
 // Crisp, themed SVG icons (outline stroke) matching --teal theme
