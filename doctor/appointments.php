@@ -219,7 +219,7 @@ $badges = ['Pending'=>'badge-pending','Confirmed'=>'badge-confirmed','Completed'
             <?php foreach ($appts as $a): ?>
             <tr>
                 <td><?= $a['appointment_id'] ?></td>
-                <td><strong><?= htmlspecialchars($a['patient_name']) ?></strong></td>
+                <td><strong><?= htmlspecialchars($a['patient_name'] ?? '') ?></strong></td>
                 <td><?= htmlspecialchars($a['test_name'] ?? '—') ?></td>
                 <td><?= $a['appointment_date'] ?></td>
                 <td><?= substr($a['appointment_time'],0,5) ?></td>

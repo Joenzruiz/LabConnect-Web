@@ -73,11 +73,11 @@ $users = $pdo->query("SELECT * FROM users WHERE role != 'Patient' ORDER BY creat
             <?php foreach ($users as $u): ?>
             <tr>
                 <td><?= $u['user_id'] ?></td>
-                <td><strong><?= htmlspecialchars($u['email']) ?></strong></td>
-                <td><?= $u['role'] ?></td>
-                <td><span class="badge <?= $u['status']==='Active' ? 'badge-confirmed' : 'badge-cancelled' ?>"><?= $u['status'] ?></span></td>
+                <td><strong><?= htmlspecialchars($u['email'] ?? '') ?></strong></td>
+                <td><?= $u['role'] ?? '' ?></td>
+                <td><span class="badge <?= ($u['status'] ?? '') ==='Active' ? 'badge-confirmed' : 'badge-cancelled' ?>"><?= $u['status'] ?? '' ?></span></td>
                 <td><?= $u['last_active'] ? date('M d, Y H:i', strtotime($u['last_active'])) : '—' ?></td>
-                <td><?= date('M d, Y', strtotime($u['created_at'])) ?></td>
+                <td><?= $u['created_at'] ? date('M d, Y', strtotime($u['created_at'])) : '' ?></td>
                 <td class="actions">
                     <form method="POST" style="display:inline">
                         <input type="hidden" name="_action" value="toggle">

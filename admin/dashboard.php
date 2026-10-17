@@ -170,8 +170,8 @@ $month_names = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','
         <?php foreach ($queue as $appt): ?>
         <div class="queue-item">
             <div class="queue-main">
-                <strong><?= htmlspecialchars($appt['patient_name']) ?> &mdash; <?= htmlspecialchars($appt['test_name']) ?></strong>
-                <span><?= $appt['doctor_name'] ? 'Dr. '.htmlspecialchars($appt['doctor_name']) : 'No doctor assigned' ?> &bull; <?= date('M d, Y', strtotime($appt['appointment_date'])) ?> at <?= substr($appt['appointment_time'],0,5) ?></span>
+                <strong><?= htmlspecialchars($appt['patient_name'] ?? '') ?> &mdash; <?= htmlspecialchars($appt['test_name'] ?? '') ?></strong>
+                <span><?= $appt['doctor_name'] ? 'Dr. '.htmlspecialchars($appt['doctor_name'] ?? '') : 'No doctor assigned' ?> &bull; <?= $appt['appointment_date'] ? date('M d, Y', strtotime($appt['appointment_date'])) : '' ?> at <?= substr($appt['appointment_time'] ?? '',0,5) ?></span>
             </div>
             <div class="actions">
                 <form method="POST" style="display:contents">

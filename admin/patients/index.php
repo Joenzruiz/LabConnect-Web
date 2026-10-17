@@ -92,12 +92,12 @@ $patients = $patients->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($patients as $p): ?>
             <tr>
                 <td><?= $p['patient_id'] ?></td>
-                <td><strong><?= htmlspecialchars($p['first_name'].' '.$p['last_name']) ?></strong></td>
-                <td><?= htmlspecialchars($p['email']) ?></td>
-                <td><?= htmlspecialchars($p['phone']) ?></td>
-                <td><?= $p['gender'] ?></td>
-                <td><?= $p['birth_date'] ?></td>
-                <td><?= date('M d, Y', strtotime($p['created_at'])) ?></td>
+                <td><strong><?= htmlspecialchars(($p['first_name'] ?? '').' '.($p['last_name'] ?? '')) ?></strong></td>
+                <td><?= htmlspecialchars($p['email'] ?? '') ?></td>
+                <td><?= htmlspecialchars($p['phone'] ?? '') ?></td>
+                <td><?= $p['gender'] ?? '' ?></td>
+                <td><?= $p['birth_date'] ?? '' ?></td>
+                <td><?= $p['created_at'] ? date('M d, Y', strtotime($p['created_at'])) : '' ?></td>
                 <td class="actions">
                     <button class="btn btn-sm" onclick='openEdit(<?= htmlspecialchars(json_encode($p)) ?>)'>Edit</button>
                     <form method="POST" style="display:inline" onsubmit="return confirm('Delete this patient?')">

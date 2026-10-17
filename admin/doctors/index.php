@@ -72,9 +72,9 @@ $days_label = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     <?php $initials = strtoupper(substr($d['first_name'],0,1).substr($d['last_name'],0,1)); ?>
     <div class="doctor-card">
         <div class="doc-avatar"><?= $initials ?></div>
-        <strong>Dr. <?= htmlspecialchars($d['first_name'].' '.$d['last_name']) ?></strong>
-        <p style="color:var(--muted);font-size:12px;margin:4px 0 8px;"><?= htmlspecialchars($d['specialization']) ?></p>
-        <p style="font-size:12px;margin:0 0 8px;">📧 <?= htmlspecialchars($d['email']) ?> <?php if($d['phone']): ?>| 📞 <?= $d['phone'] ?><?php endif; ?></p>
+        <strong>Dr. <?= htmlspecialchars(($d['first_name'] ?? '').' '.($d['last_name'] ?? '')) ?></strong>
+        <p style="color:var(--muted);font-size:12px;margin:4px 0 8px;"><?= htmlspecialchars($d['specialization'] ?? '') ?></p>
+        <p style="font-size:12px;margin:0 0 8px;">📧 <?= htmlspecialchars($d['email'] ?? '') ?> <?php if($d['phone']): ?>| 📞 <?= $d['phone'] ?><?php endif; ?></p>
         <div>
             <?php foreach ($avail_map[$d['doctor_id']] ?? [] as $av): ?>
                 <span class="avail-badge"><?= $days_label[$av['day_of_week']] ?></span>

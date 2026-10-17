@@ -141,8 +141,8 @@ $results = $res_stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($results as $r): ?>
             <tr>
                 <td><?= $r['appointment_id'] ?></td>
-                <td><strong><?= htmlspecialchars($r['patient_name']) ?></strong></td>
-                <td><?= htmlspecialchars($r['test_name']) ?></td>
+                <td><strong><?= htmlspecialchars($r['patient_name'] ?? '') ?></strong></td>
+                <td><?= htmlspecialchars($r['test_name'] ?? '') ?></td>
                 <td><?= $r['appointment_date'] ?></td>
                 <td>
                     <?php if ($r['lab_result_id']): ?>
@@ -156,7 +156,7 @@ $results = $res_stmt->fetchAll(PDO::FETCH_ASSOC);
                 </td>
                 <td><?= $r['released_at'] ? date('M d, Y', strtotime($r['released_at'])) : '—' ?></td>
                 <td>
-                    <button class="btn btn-sm btn-primary" onclick="openUpload(<?= $r['appointment_id'] ?>, '<?= htmlspecialchars($r['patient_name']) ?>', '<?= htmlspecialchars($r['test_name']) ?>', <?= $r['lab_result_id'] ? 'true' : 'false' ?>)">
+                    <button class="btn btn-sm btn-primary" onclick="openUpload(<?= $r['appointment_id'] ?>, '<?= htmlspecialchars($r['patient_name'] ?? '') ?>', '<?= htmlspecialchars($r['test_name'] ?? '') ?>', <?= $r['lab_result_id'] ? 'true' : 'false' ?>)">
                         <?= $r['lab_result_id'] ? 'Re-upload' : 'Upload Result' ?>
                     </button>
                 </td>

@@ -59,10 +59,10 @@ $cats = ['Clinical Diagnostics','X-Ray','Ultrasound'];
             <?php foreach ($tests as $t): ?>
             <tr>
                 <td><?= $t['test_id'] ?></td>
-                <td><strong><?= htmlspecialchars($t['test_name']) ?></strong></td>
-                <td><span class="badge badge-neutral"><?= $t['category'] ?></span></td>
-                <td>₱<?= number_format($t['price'],2) ?></td>
-                <td style="max-width:200px;white-space:normal;"><?= htmlspecialchars(substr($t['preparation_instructions'],0,80)) ?><?= strlen($t['preparation_instructions'])>80?'…':'' ?></td>
+                <td><strong><?= htmlspecialchars($t['test_name'] ?? '') ?></strong></td>
+                <td><span class="badge badge-neutral"><?= $t['category'] ?? '' ?></span></td>
+                <td>₱<?= number_format($t['price'] ?? 0,2) ?></td>
+                <td style="max-width:200px;white-space:normal;"><?= htmlspecialchars(substr($t['preparation_instructions'] ?? '',0,80)) ?><?= strlen($t['preparation_instructions'] ?? '')>80?'…':'' ?></td>
                 <td><?= $t['is_active'] ? '<span class="badge badge-confirmed">Yes</span>' : '<span class="badge badge-cancelled">No</span>' ?></td>
                 <td class="actions">
                     <button class="btn btn-sm" onclick='openEdit(<?= htmlspecialchars(json_encode($t)) ?>)'>Edit</button>

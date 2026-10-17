@@ -124,7 +124,7 @@ if ($next_month > 12) { $next_month = 1; $next_year++; }
                     <span class="badge <?= $status_colors[$b['status']] ?? '' ?>"><?= $b['status'] ?></span>
                 </strong>
                 <span><?= $b['block_type'] ?> &bull; <?= substr($b['start_time'],0,5) ?> – <?= substr($b['end_time'],0,5) ?></span>
-                <?php if ($b['note']): ?><span style="display:block;margin-top:4px;color:var(--muted)"><?= htmlspecialchars($b['note']) ?></span><?php endif; ?>
+                <?php if ($b['note']): ?><span style="display:block;margin-top:4px;color:var(--muted)"><?= htmlspecialchars($b['note'] ?? '') ?></span><?php endif; ?>
             </div>
             <?php if ($b['status'] === 'Awaiting doctor'): ?>
             <div class="block-actions">
