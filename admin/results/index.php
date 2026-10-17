@@ -2,6 +2,7 @@
 session_start();
 require_once '../../config/database.php';
 require_once '../../config/email.php';
+require_once '../../config/base_url.php';
 if (!in_array($_SESSION['user_role'] ?? '', ['admin','staff'])) { header('Location: ../../index.php'); exit; }
 
 $upload_dir = __DIR__.'/../../uploads/results/';
@@ -147,7 +148,7 @@ $results = $res_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php if ($r['lab_result_id']): ?>
                         <span class="badge badge-confirmed">Ready</span>
                         <?php if ($r['file_path']): ?>
-                        <a href="/LabConnect-Web/<?= htmlspecialchars($r['file_path']) ?>" target="_blank" class="btn btn-sm" style="margin-left:4px">View File</a>
+                        <a href="<?= BASE_URL ?>/<?= htmlspecialchars($r['file_path']) ?>" target="_blank" class="btn btn-sm" style="margin-left:4px">View File</a>
                         <?php endif; ?>
                     <?php else: ?>
                         <span class="badge badge-pending">Pending</span>

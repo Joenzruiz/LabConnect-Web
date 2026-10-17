@@ -1,10 +1,12 @@
 <?php
+require_once __DIR__ . '/../config/base_url.php';
+
 $role = $_SESSION['user_role'] ?? '';
 $current = $_SERVER['PHP_SELF'];
 
 function nav($href, $iconSvg, $label, $current) {
     $active = strpos($current, $href) !== false ? 'active' : '';
-    return "<a href=\"$href\" class=\"$active\"><span class=\"nav-icon\">$iconSvg</span><span>$label</span></a>";
+    return "<a href=\"$href\" class=\"$active\"><span class="nav-icon">$iconSvg</span><span>$label</span></a>";
 }
 
 // Crisp, themed SVG icons (outline stroke) matching --teal theme
@@ -23,7 +25,7 @@ $icon_logout       = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none
 <aside class="sidebar">
     <div class="brand">
         <div class="logo-slot" style="background: transparent; border: none;">
-            <img src="/LabConnect-Web/img/logo.jpg" alt="Logo" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover;">
+            <img src="<?= BASE_URL ?>/img/logo.jpg" alt="Logo" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover;">
         </div>
         <div>
             <strong>SLIMM LAB</strong>
@@ -32,30 +34,30 @@ $icon_logout       = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none
     </div>
 
     <?php if ($role === 'admin' || $role === 'staff'): ?>
-    <div class="nav-title">Main</div>
-    <?= nav('/LabConnect-Web/admin/dashboard.php', $icon_dashboard, 'Dashboard', $current) ?>
-    <?= nav('/LabConnect-Web/admin/patients/', $icon_patients, 'Patients', $current) ?>
-    <?= nav('/LabConnect-Web/admin/doctors/', $icon_doctors, 'Doctors', $current) ?>
-    <?= nav('/LabConnect-Web/admin/tests/', $icon_tests, 'Lab Tests', $current) ?>
-    <?= nav('/LabConnect-Web/admin/appointments/', $icon_appointments, 'Appointments', $current) ?>
-    <?= nav('/LabConnect-Web/admin/schedule/', $icon_schedule, 'Schedule', $current) ?>
-    <?= nav('/LabConnect-Web/admin/results/', $icon_results, 'Results', $current) ?>
-    <?= nav('/LabConnect-Web/admin/reports/', $icon_reports, 'Reports', $current) ?>
+        <div class="nav-title">Main</div>
+        <?= nav(BASE_URL . '/admin/dashboard.php', $icon_dashboard, 'Dashboard', $current) ?>
+        <?= nav(BASE_URL . '/admin/patients/', $icon_patients, 'Patients', $current) ?>
+        <?= nav(BASE_URL . '/admin/doctors/', $icon_doctors, 'Doctors', $current) ?>
+        <?= nav(BASE_URL . '/admin/tests/', $icon_tests, 'Lab Tests', $current) ?>
+        <?= nav(BASE_URL . '/admin/appointments/', $icon_appointments, 'Appointments', $current) ?>
+        <?= nav(BASE_URL . '/admin/schedule/', $icon_schedule, 'Schedule', $current) ?>
+        <?= nav(BASE_URL . '/admin/results/', $icon_results, 'Results', $current) ?>
+        <?= nav(BASE_URL . '/admin/reports/', $icon_reports, 'Reports', $current) ?>
 
-    <?php if ($role === 'admin'): ?>
-    <div class="nav-title">Admin</div>
-    <?= nav('/LabConnect-Web/admin/users/', $icon_users, 'Users', $current) ?>
-    <?= nav('/LabConnect-Web/admin/settings/', $icon_settings, 'Settings', $current) ?>
-    <?php endif; ?>
-
+        <?php if ($role === 'admin'): ?>
+            <div class="nav-title">Admin</div>
+            <?= nav(BASE_URL . '/admin/users/', $icon_users, 'Users', $current) ?>
+            <?= nav(BASE_URL . '/admin/settings/', $icon_settings, 'Settings', $current) ?>
+        <?php endif; ?>
     <?php elseif ($role === 'doctor'): ?>
-    <div class="nav-title">Doctor Portal</div>
-    <?= nav('/LabConnect-Web/doctor/appointments.php', $icon_appointments, 'My Appointments', $current) ?>
-    <?= nav('/LabConnect-Web/doctor/schedule.php', $icon_schedule, 'My Schedule', $current) ?>
+        <div class="nav-title">Doctor Portal</div>
+        <?= nav(BASE_URL . '/doctor/appointments.php', $icon_appointments, 'My Appointments', $current) ?>
+        <?= nav(BASE_URL . '/doctor/schedule.php', $icon_schedule, 'My Schedule', $current) ?>
+        <?= nav(BASE_URL . '/doctor/results.php', $icon_results, 'Lab Results', $current) ?>
     <?php endif; ?>
 
     <div style="margin-top: auto; padding: 16px 8px 0;">
-        <a href="/LabConnect-Web/api/logout.php" style="color: var(--danger); display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 8px; text-decoration: none;">
+        <a href="<?= BASE_URL ?>/api/logout.php" style="color: var(--danger); display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 8px; text-decoration: none;">
             <span class="nav-icon" style="color: var(--danger);"><?= $icon_logout ?></span>
             <span>Logout</span>
         </a>
