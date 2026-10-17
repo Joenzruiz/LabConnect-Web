@@ -2,7 +2,7 @@
 
 $rawUrl = getenv('DATABASE_URL') ?: getenv('DB_URL') ?: getenv('POSTGRES_URL');
 
-// Also check if DB_HOST contains a full connection string
+// Also check if DB_HOST contains a full connection string or psql command
 if (!$rawUrl) {
     $dbHostEnv = getenv('DB_HOST');
     if ($dbHostEnv && (strpos($dbHostEnv, 'postgres://') !== false || strpos($dbHostEnv, 'postgresql://') !== false)) {
@@ -11,9 +11,14 @@ if (!$rawUrl) {
 }
 
 if ($rawUrl) {
-    // Strip surrounding whitespace and quotes (single or double)
-    $cleanUrl = trim($rawUrl, " \t\n\r\0\x0B'\"");
-    $parts    = parse_url($cleanUrl);
+    // Extract postgresql:// or postgres:// URL even if wrapped in psql '...', quotes, or whitespace
+    if (preg_match('/(postgres(?:ql)?:\/\/[^\s\'"]+)/i', $rawUrl, $matches)) {
+        $cleanUrl = $matches[1];
+    } else {
+        $cleanUrl = trim($rawUrl, " \t\n\r\0\x0B'\"");
+    }
+
+    $parts = parse_url($cleanUrl);
 
     $host     = $parts['host'] ?? 'localhost';
     $port     = $parts['port'] ?? '5432';
