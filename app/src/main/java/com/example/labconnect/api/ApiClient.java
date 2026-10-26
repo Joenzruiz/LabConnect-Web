@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "https://labconnect-web-35zh.onrender.com/";
+    public static final String BASE_URL = "https://labconnect-web-d4ln.onrender.com/";
 
     // Do NOT cache — always create fresh so IP changes take effect
     public static ApiService getApiService() {
